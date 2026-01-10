@@ -16,7 +16,9 @@ yargs(hideBin(process.argv))
         describe:"File is added to the staging area",
         type:"string",
     })
-},addRepo)
+},(argv)=>{
+    addRepo(argv.file);
+})
 //commit command
 .command('commit', 'Record changes to the repository', (yargs) => {
     return yargs.option('m', {

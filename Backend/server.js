@@ -27,7 +27,9 @@ yargs(hideBin(process.argv))
         demandOption: true,
         describe: 'Commit message'
     });
-},commitRepo)
+},(argv)=>{
+    commitRepo(argv.message);
+})
 //pull command
 .command('pull', 'Fetch from and integrate with another repository or a local branch', () => {},pullRepo)
 //push command

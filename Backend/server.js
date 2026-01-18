@@ -1,3 +1,10 @@
+require("dotenv").config();
+const express=require("express");
+const cors=require("cors");
+const mongoose=require("mongoose");
+const bodyParser=require("body-parser");
+const http=require("http");
+
 const yargs=require("yargs");
 const {hideBin} =require('yargs/helpers');
 const {initRepo}=require("./controllers/init.js");
@@ -46,3 +53,16 @@ yargs(hideBin(process.argv))
 .demandCommand(1,"You need to provide at least one command")
 .help()
 .parse();
+
+function startServer(){
+    const app=express();
+    const port=process.env.PORT || 3000;
+    app.use(bodyParser.json());
+    app.use(express.json());
+    const mongoURL=process.env.MONGODB_URL;
+    mongoose.connect(mongoURL).then(()=>{
+        console.log("MongoDB is connected!");
+    }).catch((err)=>{
+        console.error("unable to connect:",err.message);
+    })
+}

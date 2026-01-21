@@ -4,6 +4,7 @@ const cors=require("cors");
 const mongoose=require("mongoose");
 const bodyParser=require("body-parser");
 const http=require("http");
+const {Server}=require("socket.io");
 
 const yargs=require("yargs");
 const {hideBin} =require('yargs/helpers');
@@ -13,6 +14,7 @@ const {commitRepo}=require("./controllers/commit.js");
 const {pullRepo}=require("./controllers/pull.js");
 const {pushRepo}=require("./controllers/push.js");
 const {revertRepo}=require("./controllers/revert.js");
+const { start } = require("repl");
 
 yargs(hideBin(process.argv))
 //init command
@@ -65,4 +67,33 @@ function startServer(){
     }).catch((err)=>{
         console.error("unable to connect:",err.message);
     })
+
+    app.use(cors({origin:"*"}));    
+
+    app.get("/",(req,res)=>{
+        res.send("Welcome!");
+    })
+    let user="test";    
+    const httpServer=http.createServer(app);
+    const io=new Server(httpServer,{
+        cors:{
+            origin:"*",
+            methods:["GET","POST"]
+        }
+    });
+
+    io.on("connection", (socket) => {
+        console.log("Socket connected:", socket.id);
+
+        socket.on("joinRoom", (userID) => {
+            socket.join(userID);
+            console.log(`User joined room: ${userID}`);
+        });
+    });
+
+    httpServer.listen(port, () => {
+        console.log(`Server is running on PORT ${port}`);
+    });
 }
+
+startServer();

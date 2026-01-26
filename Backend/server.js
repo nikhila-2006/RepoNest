@@ -5,7 +5,7 @@ const mongoose=require("mongoose");
 const bodyParser=require("body-parser");
 const http=require("http");
 const {Server}=require("socket.io");
-
+const main_router=require('./router/main_router.js');
 const yargs=require("yargs");
 const {hideBin} =require('yargs/helpers');
 const {initRepo}=require("./controllers/init.js");
@@ -70,9 +70,7 @@ function startServer(){
 
     app.use(cors({origin:"*"}));    
 
-    app.get("/",(req,res)=>{
-        res.send("Welcome!");
-    })
+    app.use(main_router);
     let user="test";    
     const httpServer=http.createServer(app);
     const io=new Server(httpServer,{

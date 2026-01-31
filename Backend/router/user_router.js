@@ -5,7 +5,7 @@ const user_router=express.Router();
 
 user_router.get("/allUsers",userController.getAllUsers);
 
-user_router.post("/signup",userController.signIn);
+user_router.post("/signup",userController.signUp);
 
 user_router.post("/login",userController.login);
 

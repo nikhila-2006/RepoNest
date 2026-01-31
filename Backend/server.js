@@ -61,7 +61,7 @@ function startServer(){
     const port=process.env.PORT || 3000;
     app.use(bodyParser.json());
     app.use(express.json());
-    const mongoURL=process.env.MONGODB_URL;
+    const mongoURL=process.env.MONGODB_URI;
     mongoose.connect(mongoURL).then(()=>{
         console.log("MongoDB is connected!");
     }).catch((err)=>{

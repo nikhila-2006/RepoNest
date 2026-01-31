@@ -2,8 +2,10 @@ const express=require('express');
 const main_router=express.Router();
 const user_router=require('./user_router');
 const repo_router=require('./repo_router');
+const issue_router=require('./issue_router');
 main_router.use(user_router);
 main_router.use(repo_router);
+main_router.use(issue_router);
 main_router.get("/",(req,res)=>{
     res.send("Welcome!");
 })

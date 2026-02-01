@@ -9,7 +9,7 @@ user_router.post("/signup",userController.signUp);
 
 user_router.post("/login",userController.login);
 
-user_router.get("/userProfile",userController.getUserProfile);
+user_router.get("/userProfile/:id",userController.getUserProfile);
 
 user_router.put("/updateProfile",userController.updateUserProfile);
 

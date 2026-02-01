@@ -2,7 +2,7 @@ const jwt=require('jsonwebtoken');
 const bcrypt=require('bcryptjs');
 const {MongoClient, MongoParseError} =require('mongodb');
 const dotenv=require('dotenv');
-
+const { ObjectId } = require("mongodb");
 
 require("dotenv").config();
 
@@ -14,10 +14,6 @@ async function connectClient() {
         client=new MongoClient(uri);
         await client.connect();
     }
-}
-
-const getAllUsers=(req,res)=>{
-    console.log("All users are fetched!");
 }
 
 const signUp=async (req,res)=>{
@@ -72,15 +68,41 @@ const login=async (req,res)=>{
     }
 }
 
-const getUserProfile=(req,res)=>{
-    console.log("User fetched!");
+const getAllUsers=async (req,res)=>{
+    try{
+        await connectClient();
+        const db=client.db("reponest");
+        const usersCollection=db.collection("users");
+        const users=await usersCollection.find({}).toArray();
+        res.json(users);
+    }catch(err){
+        console.error("error during fetching:",err.message);
+        res.status(500).send("Server error!");
+    }
 }
 
-const updateUserProfile=(req,res)=>{
+const getUserProfile=async (req,res)=>{
+    const currId=req.params.id;
+    try{
+        await connectClient();
+        const db=client.db("reponest");
+        const usersCollection=db.collection("users");
+        const user=await usersCollection.findOne({_id:new ObjectId(currId)});
+        if(!user ){
+            return res.status(404).json({message:"User not found!"});
+        }
+        res.send(user);
+    }catch(err){
+        console.error("error during fetching:",err.message);
+        res.status(500).send("Server error!");
+    }
+}
+
+const updateUserProfile=async (req,res)=>{
     console.log("Profile updated");
 }
 
-const deleteUserProfile=(req,res)=>{
+const deleteUserProfile=async (req,res)=>{
     console.log("deleted user!");
 }
 
